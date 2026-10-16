@@ -15,9 +15,13 @@ pub const GITHUB: &str = "https://github.com/storytold/lightcraft";
 /// The user documentation (docs/ in the repository).
 pub const HELP: &str = "https://github.com/storytold/lightcraft/tree/main/docs";
 
+pub const UPDATES: &str = "https://github.com/DisneyMjr/LIGHT-SMART/releases/latest";
+pub const UPDATES: &str = "https://github.com/DisneyMjr/LIGHT-SMART/releases/latest";
 pub const LINKS: &[(&str, &str, &str)] = &[
     ("app.help", "LightCraft Help", HELP),
     ("app.discord", "Me siga no Insta", DISCORD),
+    ("app.checkUpdates", "Verificar atualizações", UPDATES),
+    ("app.checkUpdates", "Verificar atualizações", UPDATES),
     ("app.feedback", "Send Feedback…", FEEDBACK),
 ];
 

@@ -245,6 +245,8 @@ const LAYOUT: &[(&str, &[&str])] = &[
         "Help",
         &[
             "app.discord",
+            "app.checkUpdates",
+            "app.checkUpdates",
             "app.feedback",
             "---",
             "app.website",

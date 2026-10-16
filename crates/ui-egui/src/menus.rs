@@ -248,6 +248,8 @@ pub const UI_COMMANDS: &[UiCommand] = &[
     ("dialog.cull", "Assisted Culling…", None, "Photo"),
     ("app.help", "LightCraft Help", Some("F1"), "Help"),
     ("app.discord", "Me siga no Insta", None, "Help"),
+    ("app.checkUpdates", "Verificar atualizações", None, "Help"),
+    ("app.checkUpdates", "Verificar atualizações", None, "Help"),
     ("app.feedback", "Send Feedback…", None, "Help"),
     ("app.shortcuts", "Keyboard Shortcuts", Some("Cmd+/"), "Help"),
     ("app.setShortcut", "Set Keyboard Shortcut", None, ""),
@@ -2104,7 +2106,7 @@ pub fn run_ui_command(app: &mut LightcraftApp, id: &str, p: &Value) -> Option<Re
         "app.export" => crate::control::export_active(app, p),
         "app.showInFinder" => show_in_finder(app),
         "app.openLogFolder" => open_log_folder(app),
-        "app.discord" | "app.website" | "app.github" | "app.artcraft" | "app.help" | "app.feedback" => {
+        "app.discord" | "app.website" | "app.github" | "app.artcraft" | "app.help" | "app.feedback" | "app.checkUpdates" => {
             let url = crate::links::url_of(id).unwrap_or(crate::links::WEBSITE);
             crate::links::open(app, url)
         }
