@@ -1,0 +1,61 @@
+name: Gerar Linux Light Smart
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  linux-packages:
+    name: Linux x64 - AppImage DEB RPM
+    runs-on: ubuntu-22.04
+    timeout-minutes: 120
+    env:
+      NFPM_VERSION: "2.47.0"
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+
+      - name: Instalar dependencias Linux
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libxkbcommon-dev libwayland-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev \
+            desktop-file-utils appstream python3-yaml zsync curl
+
+      - name: Instalar nfpm para DEB e RPM
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/nfpm.deb" \
+            "https://github.com/goreleaser/nfpm/releases/download/v${NFPM_VERSION}/nfpm_${NFPM_VERSION}_amd64.deb"
+          sudo dpkg -i "$RUNNER_TEMP/nfpm.deb"
+
+      - name: Instalar Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust
+        uses: Swatinem/rust-cache@v2
+
+      - name: Gerar instaladores Linux
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: bash packaging/linux/package.sh --formats "appimage deb rpm tar"
+
+      - name: Validar arquivos gerados
+        run: |
+          ls -lh dist/release/
+          test -n "$(find dist/release -maxdepth 1 -name 'lightsmart-*-linux-x86_64.AppImage' -print -quit)"
+          test -n "$(find dist/release -maxdepth 1 -name 'lightsmart-*-linux-x86_64.deb' -print -quit)"
+          test -n "$(find dist/release -maxdepth 1 -name 'lightsmart-*-linux-x86_64.rpm' -print -quit)"
+          dpkg-deb --info dist/release/*.deb
+
+      - name: Disponibilizar instaladores
+        uses: actions/upload-artifact@v4
+        with:
+          name: LightSmart-Linux-x64
+          path: |
+            dist/release/lightsmart-*-linux-x86_64.AppImage
+            dist/release/lightsmart-*-linux-x86_64.deb
+            dist/release/lightsmart-*-linux-x86_64.rpm
+            dist/release/lightsmart-*-linux-x86_64.tar.gz
+          if-no-files-found: error
